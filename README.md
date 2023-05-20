@@ -10,7 +10,7 @@ The restaurant has captured some very basic data from their few months of operat
 
 **Entity Relationship Diagram**
 
-![](media/b80aab40727b7b71f76734568c9755ef.png)
+![Danny](https://github.com/Shishinyy/DannysDiner/assets/134147196/bef29d9d-ee5d-411a-a4f2-e0517241f11b)
 
 **Questions**
 
@@ -26,7 +26,7 @@ FROM
 GROUP BY s.customer_id;
 ```
 
-**![A screenshot of a computer Description automatically generated with low confidence](media/8e7183f2052f359c4d6a7f90b7354a9e.png)**
+![image](https://github.com/Shishinyy/DannysDiner/assets/134147196/656d3a0c-a8a4-4c8e-886c-be481eb85c57)
 
 1.  **How many days has each customer visited the restaurant?**
 
