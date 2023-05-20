@@ -1,4 +1,4 @@
-![A logo of a bowl with chopsticks and noodles Description automatically generated with low confidence](media/2ebfde50409358a80b9829e23bf097ae.png)
+![1](https://github.com/Shishinyy/DannysDiner/assets/134147196/4dd05675-a813-40d0-8b38-af8dbb07765e)
 
 **Introduction**
 
