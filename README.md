@@ -6,8 +6,6 @@ Danny seriously loves Japanese food so in the beginning of 2021, he decides to e
 
 The restaurant has captured some very basic data from their few months of operation but have no idea how to use their data to help them run the business.
 
-**Project Insights**
-
 **Entity Relationship Diagram**
 
 ![Danny](https://github.com/Shishinyy/DannysDiner/assets/134147196/bef29d9d-ee5d-411a-a4f2-e0517241f11b)
