@@ -28,7 +28,7 @@ GROUP BY s.customer_id;
 
 ![image](https://github.com/Shishinyy/DannysDiner/assets/134147196/656d3a0c-a8a4-4c8e-886c-be481eb85c57)
 
-1.  **How many days has each customer visited the restaurant?**
+2.  **How many days has each customer visited the restaurant?**
 
 ```
 SELECT 
@@ -38,9 +38,9 @@ FROM
 GROUP BY customer_id;
 ```
 
-**![A screenshot of a computer Description automatically generated with low confidence](media/de2246fd03c937040cf82ab59f8ecf25.png)**
+![image](https://github.com/Shishinyy/DannysDiner/assets/134147196/320b0e5d-7bfd-4a90-a049-18e0ed6ddc7d)
 
-1.  **What was the first item from the menu purchased by each customer?**
+3.  **What was the first item from the menu purchased by each customer?**
 
 ```
 WITH the_rank as 
@@ -61,9 +61,9 @@ FROM
 WHERE date_rank = 1;
 ```
 
-**![A screenshot of a computer Description automatically generated with low confidence](media/823e251f4f0e7ac5b49edfcda3db3003.png)**
+![image](https://github.com/Shishinyy/DannysDiner/assets/134147196/f04e7ac9-7c31-40e3-a87e-154ef1331de4)
 
-1.  **What is the most purchased item on the menu and how many times was it purchased by all customers?**
+4.  **What is the most purchased item on the menu and how many times was it purchased by all customers?**
 
 ```
 SELECT 
@@ -76,9 +76,9 @@ GROUP BY product_name
 ORDER BY times_purchased DESC;
 ```
 
-**![A screenshot of a computer Description automatically generated with low confidence](media/06f944fc9c0d6c50d8da4c4d1afaedca.png)**
+![image](https://github.com/Shishinyy/DannysDiner/assets/134147196/c1da3b8f-ba8f-427c-8e00-7cac0b33ea46)
 
-1.  **Which item was the most popular for each customer?**
+5.  **Which item was the most popular for each customer?**
 
 ```
 WITH item as 
@@ -99,9 +99,9 @@ FROM
 WHERE the_rank = 1;
 ```
 
-**![A screenshot of a computer Description automatically generated with low confidence](media/d081d75c8a5f0354d4b98bea0e48e62b.png)**
+![image](https://github.com/Shishinyy/DannysDiner/assets/134147196/c857392c-6e5f-465e-adbe-7f89f593552c)
 
-1.  **Which item was purchased first by the customer after they became a member?**
+6.  **Which item was purchased first by the customer after they became a member?**
 
 ```
 WITH CTE as 
@@ -123,9 +123,9 @@ FROM
 WHERE first_item = 1;
 ```
 
-**![A screenshot of a computer Description automatically generated with low confidence](media/494b43d5b732ad43181553563dfd67fe.png)**
+![image](https://github.com/Shishinyy/DannysDiner/assets/134147196/20c444f0-3446-452c-8fe4-12fa60cdd8b4)
 
-1.  **Which item was purchased just before the customer became a member?**
+7.  **Which item was purchased just before the customer became a member?**
 
 ```
 WITH CTE as 
@@ -147,9 +147,9 @@ FROM
 WHERE first_item = 1;
 ```
 
-**![A screenshot of a computer Description automatically generated with low confidence](media/9f4dd5c687667d6935c8dae3ba2d1f2d.png)**
+![image](https://github.com/Shishinyy/DannysDiner/assets/134147196/74b9f0e2-e562-468a-b01e-aba3502d87a3)
 
-1.  **What is the total items and amount spent for each member before they became a member?**
+8.  **What is the total items and amount spent for each member before they became a member?**
 
 ```
 SELECT 
@@ -168,9 +168,9 @@ GROUP BY s.customer_id
 ORDER BY s.customer_id;
 ```
 
-**![A screenshot of a computer Description automatically generated with low confidence](media/b5a7ad2a7f5cc5db0ad9125d4ef91e06.png)**
+![image](https://github.com/Shishinyy/DannysDiner/assets/134147196/0681f19d-c187-461f-87f2-e6ab7809872c)
 
-1.  **If each \$1 spent equates to 10 points and sushi has a 2x points multiplier - how many points would each customer have?**
+9.  **If each \$1 spent equates to 10 points and sushi has a 2x points multiplier - how many points would each customer have?**
 
 ```
 SELECT 
@@ -186,9 +186,9 @@ FROM
 GROUP BY s.customer_id;
 ```
 
-**![A screenshot of a computer Description automatically generated with low confidence](media/2e78ac8ee12df09e3d93db0b8228cacf.png)**
+![image](https://github.com/Shishinyy/DannysDiner/assets/134147196/bd7b20ff-d5aa-4a39-a55d-324ad1d388a8)
 
-1.  **In the first week after a customer joins the program (including their join date) they earn 2x points on all items, not just sushi - how many points do customer A and B have at the end of January?**
+10.  **In the first week after a customer joins the program (including their join date) they earn 2x points on all items, not just sushi - how many points do customer A and B have at the end of January?**
 
 ```
 SELECT 
@@ -209,4 +209,4 @@ WHERE
 GROUP BY s.customer_id;
 ```
 
-![A screenshot of a computer Description automatically generated with low confidence](media/b60673304284049cb2e65c977e37bc24.png)
+![image](https://github.com/Shishinyy/DannysDiner/assets/134147196/d7ebed97-f11f-49dc-be4b-b8453d55b4fb)
