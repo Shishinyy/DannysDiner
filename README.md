@@ -1,4 +1,4 @@
-![](RackMultipart20230520-1-43n830_html_ac2be78354216ff7.png)
+![A logo of a bowl with chopsticks and noodles Description automatically generated with low confidence](media/2ebfde50409358a80b9829e23bf097ae.png)
 
 **Introduction**
 
@@ -10,300 +10,203 @@ The restaurant has captured some very basic data from their few months of operat
 
 **Entity Relationship Diagram**
 
-![](RackMultipart20230520-1-43n830_html_54007ed99c90f295.png)
+![](media/b80aab40727b7b71f76734568c9755ef.png)
 
 **Questions**
 
-1. **What is the total amount each customer spent at the restaurant?**
+1.  **What is the total amount each customer spent at the restaurant?**
 
-SELECT
-
-s.customer\_id, SUM(m.price) AS total\_spent
-
+```
+SELECT 
+    s.customer_id, SUM(m.price) AS total_spent
 FROM
+    sales s
+        JOIN
+    menu m ON s.product_id = m.product_id
+GROUP BY s.customer_id;
+```
 
-sales s
+**![A screenshot of a computer Description automatically generated with low confidence](media/8e7183f2052f359c4d6a7f90b7354a9e.png)**
 
-JOIN
+1.  **How many days has each customer visited the restaurant?**
 
-menu m ON s.product\_id = m.product\_id
-
-GROUP BY s.customer\_id;
-
-![](RackMultipart20230520-1-43n830_html_83467129bf5d5fb3.png)
-
-1. **How many days has each customer visited the restaurant?**
-
-SELECT
-
-customer\_id, COUNT(DISTINCT order\_date)
-
+```
+SELECT 
+    customer_id, COUNT(DISTINCT order_date)
 FROM
+    sales
+GROUP BY customer_id;
+```
 
-sales
+**![A screenshot of a computer Description automatically generated with low confidence](media/de2246fd03c937040cf82ab59f8ecf25.png)**
 
-GROUP BY customer\_id;
+1.  **What was the first item from the menu purchased by each customer?**
 
-![](RackMultipart20230520-1-43n830_html_254da14448243ac.png)
-
-1. **What was the first item from the menu purchased by each customer?**
-
-WITH the\_rank as
-
+```
+WITH the_rank as 
 (
-
-SELECT
-
-s.customer\_id, m.product\_name, s.order\_date,
-
-RANK() OVER ( partition by s.customer\_id order by s.order\_date) as date\_rank
-
-FROM
-
-sales s
-
-JOIN
-
-menu m ON s.product\_id = m.product\_id
-
-GROUP BY s.customer\_id, m.product\_name, s.order\_date
-
+	SELECT 
+		s.customer_id, m.product_name, s.order_date,
+        RANK() OVER ( partition by s.customer_id order by s.order_date) as date_rank
+	FROM 
+		sales s
+			JOIN 
+		menu m ON s.product_id = m.product_id
+	GROUP BY s.customer_id, m.product_name, s.order_date
 )
+SELECT 
+	customer_id, product_name
+FROM 
+	the_rank
+WHERE date_rank = 1;
+```
 
-SELECT
+**![A screenshot of a computer Description automatically generated with low confidence](media/823e251f4f0e7ac5b49edfcda3db3003.png)**
 
-customer\_id, product\_name
+1.  **What is the most purchased item on the menu and how many times was it purchased by all customers?**
 
+```
+SELECT 
+    product_name, COUNT(product_name) AS times_purchased
 FROM
+    menu m
+        JOIN
+    sales s ON m.product_id = s.product_id
+GROUP BY product_name
+ORDER BY times_purchased DESC;
+```
 
-the\_rank
+**![A screenshot of a computer Description automatically generated with low confidence](media/06f944fc9c0d6c50d8da4c4d1afaedca.png)**
 
-WHERE date\_rank = 1;
+1.  **Which item was the most popular for each customer?**
 
-![](RackMultipart20230520-1-43n830_html_7a5be439cae675bd.png)
-
-1. **What is the most purchased item on the menu and how many times was it purchased by all customers?**
-
-SELECT
-
-product\_name, COUNT(product\_name) AS times\_purchased
-
-FROM
-
-menu m
-
-JOIN
-
-sales s ON m.product\_id = s.product\_id
-
-GROUP BY product\_name
-
-ORDER BY times\_purchased DESC;
-
-![](RackMultipart20230520-1-43n830_html_af57ebe2ffda8677.png)
-
-1. **Which item was the most popular for each customer?**
-
-WITH item as
-
-(
-
-SELECT
-
-s.customer\_id , m.product\_name, count(m.product\_name) as popular\_item,
-
-RANK() OVER ( PARTITION BY s.customer\_id ORDER BY count(m.product\_name) DESC ) as the\_rank
-
-FROM
-
-sales s
-
-JOIN
-
-menu m ON s.product\_id = m.product\_id
-
-GROUP BY s.customer\_id,m.product\_name
-
+```
+WITH item as 
+( 
+	SELECT 
+		s.customer_id , m.product_name, count(m.product_name) as popular_item,
+	RANK() OVER ( PARTITION BY s.customer_id ORDER BY count(m.product_name) DESC ) as the_rank
+	FROM 
+		sales s
+			JOIN 
+		menu m ON s.product_id = m.product_id
+	GROUP BY s.customer_id,m.product_name
 )
+SELECT 
+	customer_id,product_name
+FROM 
+	item
+WHERE the_rank = 1;
+```
 
-SELECT
+**![A screenshot of a computer Description automatically generated with low confidence](media/d081d75c8a5f0354d4b98bea0e48e62b.png)**
 
-customer\_id,product\_name
+1.  **Which item was purchased first by the customer after they became a member?**
 
-FROM
-
-item
-
-WHERE the\_rank = 1;
-
-![](RackMultipart20230520-1-43n830_html_7d7d6a2e9388aa64.png)
-
-1. **Which item was purchased first by the customer after they became a member?**
-
-WITH CTE as
-
-( SELECT
-
-s.customer\_id, m.product\_name, s.order\_date, me.join\_date,
-
-RANK() OVER ( PARTITION BY s.customer\_id ORDER BY order\_date ) as first\_item
-
-FROM
-
-sales s
-
-JOIN
-
-members me ON s.customer\_id = me.customer\_id
-
-JOIN
-
-menu m ON s.product\_id = m.product\_id
-
-WHERE order\_date \>= join\_date
-
+```
+WITH CTE as 
+( 	SELECT 
+		s.customer_id, m.product_name, s.order_date, me.join_date,
+		RANK() OVER ( PARTITION BY s.customer_id ORDER BY order_date ) as first_item
+	FROM 
+		sales s 
+			JOIN 
+		members me ON s.customer_id = me.customer_id
+			JOIN 
+		menu m ON s.product_id = m.product_id 
+	WHERE order_date >= join_date
 )
+SELECT 
+	customer_id,product_name
+FROM 
+	CTE 
+WHERE first_item = 1;
+```
 
-SELECT
+**![A screenshot of a computer Description automatically generated with low confidence](media/494b43d5b732ad43181553563dfd67fe.png)**
 
-customer\_id,product\_name
+1.  **Which item was purchased just before the customer became a member?**
 
-FROM
-
-CTE
-
-WHERE first\_item = 1;
-
-![](RackMultipart20230520-1-43n830_html_18fe57eeaaa04eed.png)
-
-1. **Which item was purchased just before the customer became a member?**
-
-WITH CTE as
-
-( SELECT
-
-s.customer\_id, m.product\_name, s.order\_date, me.join\_date,
-
-RANK() OVER ( PARTITION BY s.customer\_id ORDER BY order\_date DESC ) as first\_item
-
-FROM
-
-sales s
-
-JOIN
-
-members me ON s.customer\_id = me.customer\_id
-
-JOIN
-
-menu m ON s.product\_id = m.product\_id
-
-WHERE order\_date \< join\_date
-
+```
+WITH CTE as 
+( 	SELECT 
+		s.customer_id, m.product_name, s.order_date, me.join_date,
+		RANK() OVER ( PARTITION BY s.customer_id ORDER BY order_date DESC ) as first_item
+	FROM 
+		sales s 
+			JOIN 
+        members me ON s.customer_id = me.customer_id
+			JOIN 
+		menu m ON s.product_id = m.product_id 
+	WHERE order_date < join_date
 )
+SELECT 
+	customer_id,product_name
+FROM 
+	CTE 
+WHERE first_item = 1;
+```
 
-SELECT
+**![A screenshot of a computer Description automatically generated with low confidence](media/9f4dd5c687667d6935c8dae3ba2d1f2d.png)**
 
-customer\_id,product\_name
+1.  **What is the total items and amount spent for each member before they became a member?**
 
+```
+SELECT 
+    s.customer_id,
+    COUNT(s.product_id) total_items,
+    SUM(m.price) total_spent
 FROM
-
-CTE
-
-WHERE first\_item = 1;
-
-![](RackMultipart20230520-1-43n830_html_c6445c3d0ba74d60.png)
-
-1. **What is the total items and amount spent for each member before they became a member?**
-
-SELECT
-
-s.customer\_id,
-
-COUNT(s.product\_id) total\_items,
-
-SUM(m.price) total\_spent
-
-FROM
-
-sales s
-
-JOIN
-
-menu m ON s.product\_id = m.product\_id
-
-JOIN
-
-members me ON s.customer\_id = me.customer\_id
-
+    sales s
+        JOIN
+    menu m ON s.product_id = m.product_id
+        JOIN
+    members me ON s.customer_id = me.customer_id
 WHERE
+    s.order_date < me.join_date
+GROUP BY s.customer_id
+ORDER BY s.customer_id;
+```
 
-s.order\_date \< me.join\_date
+**![A screenshot of a computer Description automatically generated with low confidence](media/b5a7ad2a7f5cc5db0ad9125d4ef91e06.png)**
 
-GROUP BY s.customer\_id
+1.  **If each \$1 spent equates to 10 points and sushi has a 2x points multiplier - how many points would each customer have?**
 
-ORDER BY s.customer\_id;
-
-![](RackMultipart20230520-1-43n830_html_64fc055b56e0dcf0.png)
-
-1. **If each $1 spent equates to 10 points and sushi has a 2x points multiplier - how many points would each customer have?**
-
-SELECT
-
-s.customer\_id,
-
-SUM(CASE
-
-WHEN m.product\_name = 'Sushi' THEN m.price \* 10 \* 2
-
-ELSE m.price \* 10
-
-END) AS total\_points
-
+```
+SELECT 
+    s.customer_id,
+    SUM(CASE
+        WHEN m.product_name = 'Sushi' THEN m.price * 10 * 2
+        ELSE m.price * 10
+    END) AS total_points
 FROM
+    Sales s
+        JOIN
+    menu m ON s.product_id = m.product_id
+GROUP BY s.customer_id;
+```
 
-Sales s
+**![A screenshot of a computer Description automatically generated with low confidence](media/2e78ac8ee12df09e3d93db0b8228cacf.png)**
 
-JOIN
+1.  **In the first week after a customer joins the program (including their join date) they earn 2x points on all items, not just sushi - how many points do customer A and B have at the end of January?**
 
-menu m ON s.product\_id = m.product\_id
-
-GROUP BY s.customer\_id;
-
-![](RackMultipart20230520-1-43n830_html_870ca14588f6d246.png)
-
-1. **In the first week after a customer joins the program (including their join date) they earn 2x points on all items, not just sushi - how many points do customer A and B have at the end of January?**
-
-SELECT
-
-s.customer\_id,
-
-SUM(CASE
-
-WHEN s.order\_date BETWEEN me.join\_date AND DATE\_ADD(me.join\_date, INTERVAL 6 DAY) THEN m.price \* 10 \* 2
-
-WHEN m.product\_name = 'sushi' THEN m.price \* 10 \* 2
-
-ELSE m.price \* 10
-
-END) AS total\_points
-
+```
+SELECT 
+    s.customer_id,
+    SUM(CASE
+        WHEN s.order_date BETWEEN me.join_date AND DATE_ADD(me.join_date, INTERVAL 6 DAY) THEN m.price * 10 * 2
+        WHEN m.product_name = 'sushi' THEN m.price * 10 * 2
+        ELSE m.price * 10
+    END) AS total_points
 FROM
-
-Sales s
-
-JOIN
-
-menu m ON s.product\_id = m.product\_id
-
-JOIN
-
-members me ON s.customer\_id = me.customer\_id
-
+    Sales s
+        JOIN
+    menu m ON s.product_id = m.product_id
+        JOIN
+    members me ON s.customer_id = me.customer_id
 WHERE
+    s.order_date <= '2021-01-31'
+GROUP BY s.customer_id;
+```
 
-s.order\_date \<= '2021-01-31'
-
-GROUP BY s.customer\_id;
-
-![](RackMultipart20230520-1-43n830_html_d2634149f2224883.png)
+![A screenshot of a computer Description automatically generated with low confidence](media/b60673304284049cb2e65c977e37bc24.png)
